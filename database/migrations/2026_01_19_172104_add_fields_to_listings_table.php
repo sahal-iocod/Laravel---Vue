@@ -12,7 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('listings', function (Blueprint $table) {
-            //
+            $table->unsignedTinyInteger('beds');
+            $table->unsignedTinyInteger('baths');
+            $table->unsignedSmallInteger('area');
+
+            $table->tinyText('city');
+            $table->tinyText('code');
+            $table->tinyText('street');
+            $table->tinyText('street_nr');
+
+            $table->unsignedInteger('price');
         });
     }
 
@@ -21,8 +30,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('listings', function (Blueprint $table) {
-            //
-        });
+        // Schema::table('listings', function (Blueprint $table) {
+        //     //
+        // });
+
+        Schema::dropColumns('listings', [
+            'beds', 'baths', 'area', 'city', 'code', 'street', 'street_nr', 'price',
+        ]);
     }
 };
