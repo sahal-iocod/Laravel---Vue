@@ -4,10 +4,10 @@
       <ListingAddress :listing="listing" />
     </Link>
     <div>
-      <Link :href="`/listings/${listing.id}/edit`">Edit</Link>
+      <Link :href="route('listings.edit',{listing:listing.id})">Edit</Link>
     </div>
     <div>
-      <Link :href="`/listings/${listing.id}`" method="DELETE">Delete</Link>
+      <Link :href="route('listings.destroy',{listing:listing.id})" method="DELETE">Delete</Link>
     </div>
   </div>
 </template>
