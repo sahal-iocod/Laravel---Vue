@@ -33,10 +33,18 @@ class ListingController extends Controller
      */
     public function store(Request $request)
     {
-        Listing::create($request->all());
+        Listing::create($request->validate([
+            'beds' => 'required|integer|min:0|max:20',
+            'baths' => 'required|integer|min:0|max:20',
+            'area' => 'required|integer|min:15|max:1500',
+            'city' => 'required',
+            'code' => 'required',
+            'street' => 'required',
+            'street_nr' => 'required|min:1|max:1000',
+            'price' => 'required|integer|min:1|max:20000000',
+        ]));
 
-        return redirect()->route('listings.index');
-
+        return redirect()->route('listings.index')->with('success', 'Listing created successfully');
     }
 
     /**
@@ -56,7 +64,10 @@ class ListingController extends Controller
      */
     public function edit(Listing $listing)
     {
-        //
+        return inertia(
+            'Listing/Edit',
+            ['listing' => Listing::find($listing->id)]
+        );
     }
 
     /**
@@ -64,7 +75,18 @@ class ListingController extends Controller
      */
     public function update(Request $request, Listing $listing)
     {
-        //
+        $listing->update($request->validate([
+            'beds' => 'required|integer|min:0|max:20',
+            'baths' => 'required|integer|min:0|max:20',
+            'area' => 'required|integer|min:15|max:1500',
+            'city' => 'required',
+            'code' => 'required',
+            'street' => 'required',
+            'street_nr' => 'required|min:1|max:1000',
+            'price' => 'required|integer|min:1|max:20000000',
+        ]));
+
+        return redirect()->route('listings.index')->with('success', 'Listing updated successfully');
     }
 
     /**
@@ -72,6 +94,8 @@ class ListingController extends Controller
      */
     public function destroy(Listing $listing)
     {
-        //
+        $listing->delete();
+
+        return redirect()->back()->with('success', 'Listing was deleted!');
     }
 }
