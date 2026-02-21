@@ -2,7 +2,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
     <Box v-for="listing in listings" :key="listing.id">
       <Link :href="route('listings.show', listing.id)">
-        <Price :price="listing.price" class="text-2xl"/>
+        <Price :price="listing.price" class="text-2xl" />
         <ListingSpace :listing="listing" class="text-lg" />
         <ListingAddress :listing="listing" class="text-gray-500" />
       </Link>
