@@ -79,6 +79,8 @@ class ListingController extends Controller
      */
     public function update(Request $request, Listing $listing)
     {
+        Gate::authorize('update', $listing);
+
         $listing->update($request->validate([
             'beds' => 'required|integer|min:0|max:20',
             'baths' => 'required|integer|min:0|max:20',
@@ -98,6 +100,8 @@ class ListingController extends Controller
      */
     public function destroy(Listing $listing)
     {
+        Gate::authorize('delete', $listing);
+
         $listing->delete();
 
         return redirect()->back()->with('success', 'Listing was deleted!');

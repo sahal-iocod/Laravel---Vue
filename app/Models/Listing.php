@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Policies\ListingPolicy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+#[UsePolicy(ListingPolicy::class)]
 
 class Listing extends Model
 {
