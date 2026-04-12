@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Listing extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'beds',
@@ -23,6 +23,11 @@ class Listing extends Model
         'street',
         'street_nr',
         'price',
+    ];
+
+    protected $sortable = [
+        'price',
+        'created_at',
     ];
 
     public function owner()
@@ -55,6 +60,14 @@ class Listing extends Model
         )->when(
             $filters['areaTo'] ?? false,
             fn ($query, $value) => $query->where('area', '<=', $value)
+        )->when(
+            $filters['deleted'] ?? false,
+            fn ($query, $value) => $query->withTrashed()
+        )->when(
+            $filters['by'] ?? false,
+            fn ($query, $value) => ! in_array($value, $this->sortable)
+                ? $query :
+                $query->orderBy($value, $filters['order'] ?? 'desc')
         );
     }
 }
