@@ -11,12 +11,28 @@ class ListingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $filters = $request->only(['priceFrom', 'priceTo', 'beds', 'baths', 'areaFrom', 'areaTo']);
+
+        $query = Listing::orderByDesc('created_at');
+
+        $filters = $request->only([
+            'priceFrom',
+            'priceTo',
+            'beds',
+            'baths',
+            'areaFrom',
+            'areaTo',
+        ]);
+
         return inertia(
             'Listing/Index',
             [
-                'listings' => Listing::orderByDesc('created_at')->paginate(10),
+                'filters' => $filters,
+                'listings' => Listing::mostRecent()
+                    ->filter($filters)
+                    ->paginate(10)->withQueryString(),
             ]
         );
     }
@@ -93,17 +109,5 @@ class ListingController extends Controller
         ]));
 
         return redirect()->route('listings.index')->with('success', 'Listing updated successfully');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Listing $listing)
-    {
-        Gate::authorize('delete', $listing);
-
-        $listing->delete();
-
-        return redirect()->back()->with('success', 'Listing was deleted!');
     }
 }
